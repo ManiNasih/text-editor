@@ -35,6 +35,7 @@ import {
   RemoveFormattingIcon,
   SearchIcon,
   SpellCheckIcon,
+  StrikethroughIcon,
   UnderlineIcon,
   Undo2Icon,
   UploadIcon,
@@ -378,7 +379,7 @@ const LinkButton = () => {
     <DropdownMenu
       onOpenChange={(open) => {
         if (open) {
-          setValue("");
+          setValue(editor?.getAttributes("link").href || "");
         }
       }}
     >
@@ -388,7 +389,7 @@ const LinkButton = () => {
         </button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent>
+      <DropdownMenuContent className="flex gap-x-2">
         <Input
           placeholder="https://example.com"
           value={value}
@@ -415,7 +416,6 @@ const HighlighterColorButton = () => {
       <DropdownMenuTrigger asChild>
         <button className="h-7 min-w-7 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
           <HighlighterIcon className="size-4" />
-          {/* <span className="text-sm">A</span> */}
           <div className="h-0.5 w-full" style={{ backgroundColor: value }} />
         </button>
       </DropdownMenuTrigger>
@@ -631,7 +631,13 @@ const Toolbar = () => {
         label: "Underline",
         icon: UnderlineIcon,
         onClick: () => editor?.chain().focus().toggleUnderline().run(),
-        isActive: editor?.isActive("italic"),
+        isActive: editor?.isActive("underline"),
+      },
+      {
+        label: "Strikethrough",
+        icon: StrikethroughIcon,
+        onClick: () => editor?.chain().focus().toggleStrike().run(),
+        isActive: editor?.isActive("strike"),
       },
     ],
     [
