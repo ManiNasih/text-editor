@@ -54,6 +54,12 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const LineHeightButton = () => {
   const { editor } = useEditorStore();
@@ -254,29 +260,41 @@ const AlignButton = () => {
   ];
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="h-7 min-w-7 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
-          <AlignLeftIcon className="size-4" />
-        </button>
-      </DropdownMenuTrigger>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="h-7 min-w-7 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+                <AlignLeftIcon className="size-4" />
+              </button>
+            </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="p-1 flex-col flex gap-y-1">
-        {alignments.map(({ label, value, icon: Icon }) => (
-          <button
-            key={value}
-            onClick={() => editor?.chain().focus().setTextAlign(value).run()}
-            className={cn(
-              "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-              editor?.isActive({ textAlign: value }) && "bg-neutral-200/80"
-            )}
-          >
-            <Icon className="size-4" />
-            <span className="text-sm">{label}</span>
-          </button>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+            <DropdownMenuContent className="p-1 flex-col flex gap-y-1">
+              {alignments.map(({ label, value, icon: Icon }) => (
+                <button
+                  key={value}
+                  onClick={() =>
+                    editor?.chain().focus().setTextAlign(value).run()
+                  }
+                  className={cn(
+                    "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
+                    editor?.isActive({ textAlign: value }) &&
+                      "bg-neutral-200/80"
+                  )}
+                >
+                  <Icon className="size-4" />
+                  <span className="text-sm">{label}</span>
+                </button>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Align</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 
@@ -376,29 +394,38 @@ const LinkButton = () => {
   };
 
   return (
-    <DropdownMenu
-      onOpenChange={(open) => {
-        if (open) {
-          setValue(editor?.getAttributes("link").href || "");
-        }
-      }}
-    >
-      <DropdownMenuTrigger asChild>
-        <button className="h-7 min-w-7 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
-          <Link2Icon className="size-4" />
-        </button>
-      </DropdownMenuTrigger>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div>
+          <DropdownMenu
+            onOpenChange={(open) => {
+              if (open) {
+                setValue(editor?.getAttributes("link").href || "");
+              }
+            }}
+          >
+            <DropdownMenuTrigger asChild>
+              <button className="h-7 min-w-7 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+                <Link2Icon className="size-4" />
+              </button>
+            </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="flex gap-x-2">
-        <Input
-          placeholder="https://example.com"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
+            <DropdownMenuContent className="flex gap-x-2">
+              <Input
+                placeholder="https://example.com"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+              />
 
-        <Button onClick={() => onChange(value)}>Apply</Button>
-      </DropdownMenuContent>
-    </DropdownMenu>
+              <Button onClick={() => onChange(value)}>Apply</Button>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Insert Link</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 
@@ -412,18 +439,30 @@ const HighlighterColorButton = () => {
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="h-7 min-w-7 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
-          <HighlighterIcon className="size-4" />
-          <div className="h-0.5 w-full" style={{ backgroundColor: value }} />
-        </button>
-      </DropdownMenuTrigger>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="h-7 min-w-7 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+                <HighlighterIcon className="size-4" />
+                <div
+                  className="h-0.5 w-full"
+                  style={{ backgroundColor: value }}
+                />
+              </button>
+            </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="p-2.5">
-        <SketchPicker onChange={onChange} color={value} />
-      </DropdownMenuContent>
-    </DropdownMenu>
+            <DropdownMenuContent className="p-2.5">
+              <SketchPicker onChange={onChange} color={value} />
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Highlight Text</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 
@@ -437,18 +476,30 @@ const TextColorButton = () => {
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className="h-7 min-w-7 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
-          <span className="text-sm">A</span>
-          <div className="h-0.5 w-full" style={{ backgroundColor: value }} />
-        </button>
-      </DropdownMenuTrigger>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="h-7 min-w-7 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+                <span className="text-sm">A</span>
+                <div
+                  className="h-0.5 w-full"
+                  style={{ backgroundColor: value }}
+                />
+              </button>
+            </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="p-2.5">
-        <SketchPicker color={value} onChange={onChange} />
-      </DropdownMenuContent>
-    </DropdownMenu>
+            <DropdownMenuContent className="p-2.5">
+              <SketchPicker color={value} onChange={onChange} />
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Text Color</p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 
@@ -557,23 +608,36 @@ interface ToolbarButtonProps {
   onClick?: () => void;
   isActive?: boolean;
   icon: LucideIcon;
+  label: string;
+  shortcut?: string;
 }
 
 const ToolbarButton = ({
   onClick,
   isActive,
   icon: Icon,
+  label,
+  shortcut,
 }: ToolbarButtonProps) => {
   return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80",
-        isActive && "bg-neutral-200/80"
-      )}
-    >
-      <Icon className="size-4" />
-    </button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          onClick={onClick}
+          className={cn(
+            "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80",
+            isActive && "bg-neutral-200/80"
+          )}
+        >
+          <Icon className="size-4" />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>
+          {label}&nbsp;{shortcut && shortcut}
+        </p>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 
@@ -585,22 +649,26 @@ const Toolbar = () => {
     icon: LucideIcon;
     onClick: () => void;
     isActive?: boolean;
+    shortcut?: string;
   }[][] = [
     [
       {
         label: "Undo",
         icon: Undo2Icon,
         onClick: () => editor?.chain().focus().undo().run(),
+        shortcut: "(Ctrl+Z)",
       },
       {
         label: "Redo",
         icon: Redo2Icon,
         onClick: () => editor?.chain().focus().redo().run(),
+        shortcut: "(Ctrl+Y)",
       },
       {
         label: "Print",
         icon: PrinterIcon,
         onClick: () => window.print(),
+        shortcut: "(Ctrl+P)",
       },
       {
         label: "Spell Check",
@@ -620,24 +688,28 @@ const Toolbar = () => {
         icon: BoldIcon,
         onClick: () => editor?.chain().focus().toggleBold().run(),
         isActive: editor?.isActive("bold"),
+        shortcut: "(Ctrl+B)",
       },
       {
         label: "Italic",
         icon: ItalicIcon,
         onClick: () => editor?.chain().focus().toggleItalic().run(),
         isActive: editor?.isActive("italic"),
+        shortcut: "(Ctrl+I)",
       },
       {
         label: "Underline",
         icon: UnderlineIcon,
         onClick: () => editor?.chain().focus().toggleUnderline().run(),
         isActive: editor?.isActive("underline"),
+        shortcut: "(Ctrl+U)",
       },
       {
         label: "Strikethrough",
         icon: StrikethroughIcon,
         onClick: () => editor?.chain().focus().toggleStrike().run(),
         isActive: editor?.isActive("strike"),
+        shortcut: "(Ctrl+Shift+S)",
       },
     ],
     [
@@ -652,6 +724,7 @@ const Toolbar = () => {
         icon: ListTodoIcon,
         onClick: () => editor?.chain().focus().toggleTaskList().run(),
         isActive: editor?.isActive("taskList"),
+        shortcut: "(Ctrl+Shift+9)",
       },
       {
         label: "Remove Formatting",
@@ -662,30 +735,33 @@ const Toolbar = () => {
   ];
   return (
     <div className="bg-[#f1f4f9] px-2.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto">
-      {sections[0].map((item) => (
-        <ToolbarButton key={item.label} {...item} />
-      ))}
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      <FontFamilyButton />
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      <HeadingLevelButton />
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      <FontSizeButton />
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      {sections[1].map((item) => (
-        <ToolbarButton key={item.label} {...item} />
-      ))}
-      <TextColorButton />
-      <HighlighterColorButton />
-      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
-      <LinkButton />
-      <ImageButton />
-      <AlignButton />
-      <LineHeightButton />
-      <ListButton />
-      {sections[2].map((item) => (
-        <ToolbarButton key={item.label} {...item} />
-      ))}
+      <TooltipProvider>
+        {sections[0].map((item) => (
+          <ToolbarButton key={item.label} {...item} />
+        ))}
+        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <FontFamilyButton />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <HeadingLevelButton />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <FontSizeButton />
+        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        {sections[1].map((item) => (
+          <ToolbarButton key={item.label} {...item} />
+        ))}
+        <TextColorButton />
+        <HighlighterColorButton />
+
+        <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+        <LinkButton />
+        <ImageButton />
+        <AlignButton />
+        <LineHeightButton />
+        <ListButton />
+        {sections[2].map((item) => (
+          <ToolbarButton key={item.label} {...item} />
+        ))}
+      </TooltipProvider>
     </div>
   );
 };
