@@ -89,7 +89,7 @@ const LineHeightButton = () => {
             className={cn(
               "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
               editor?.getAttributes("paragraph").lineHeight === value &&
-                "bg-neutral-200/80"
+                "bg-neutral-200/80",
             )}
           >
             <span className="text-sm">{label}</span>
@@ -221,7 +221,7 @@ const ListButton = () => {
             onClick={onClick}
             className={cn(
               "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
-              isActive() && "bg-neutral-200/80"
+              isActive() && "bg-neutral-200/80",
             )}
           >
             <Icon className="size-4" />
@@ -280,7 +280,7 @@ const AlignButton = () => {
                   className={cn(
                     "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
                     editor?.isActive({ textAlign: value }) &&
-                      "bg-neutral-200/80"
+                      "bg-neutral-200/80",
                   )}
                 >
                   <Icon className="size-4" />
@@ -552,7 +552,7 @@ const HeadingLevelButton = () => {
               "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
               ((value === 0 && !editor?.isActive("heading")) ||
                 editor?.isActive("heading", { level: value })) &&
-                "bg-neutral-200/80"
+                "bg-neutral-200/80",
             )}
           >
             {label}
@@ -592,7 +592,7 @@ const FontFamilyButton = () => {
             className={cn(
               "flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80",
               editor?.getAttributes("textStyle").fontFamily === value &&
-                "bg-neutral-200/80"
+                "bg-neutral-200/80",
             )}
             style={{ fontFamily: value }}
           >
@@ -626,7 +626,7 @@ const ToolbarButton = ({
           onClick={onClick}
           className={cn(
             "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80",
-            isActive && "bg-neutral-200/80"
+            isActive && "bg-neutral-200/80",
           )}
         >
           <Icon className="size-4" />
@@ -677,7 +677,7 @@ const Toolbar = () => {
           const current = editor?.view.dom.getAttribute("spellcheck");
           editor?.view.dom.setAttribute(
             "spellcheck",
-            current === "false" ? "true" : "false"
+            current === "false" ? "true" : "false",
           );
         },
       },
@@ -716,8 +716,8 @@ const Toolbar = () => {
       {
         label: "Comment",
         icon: MessageSquarePlusIcon,
-        onClick: () => console.log("comment"),
-        isActive: false,
+        onClick: () => editor?.chain().addPendingComment().run(),
+        isActive: editor?.isActive("liveblocksCommentMark"),
       },
       {
         label: "List Todo",

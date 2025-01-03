@@ -15,6 +15,8 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "./ui/alert-dialog";
+import { toast } from "sonner";
+import { redirect } from "next/navigation";
 
 interface RemoveDialogProps {
   documentId: Id<"documents">;
@@ -45,7 +47,13 @@ export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
             onClick={(e) => {
               e.stopPropagation();
               setIsRemoving(true);
-              remove({ id: documentId }).finally(() => setIsRemoving(false));
+              remove({ id: documentId })
+                .then(() => {
+                  toast.success("Document removed");
+                  redirect("/");
+                })
+                .catch(() => toast.error("You are not the owner"))
+                .finally(() => setIsRemoving(false));
             }}
           >
             Delete
